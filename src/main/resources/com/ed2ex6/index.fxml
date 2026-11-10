@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ed2ex6.controller.MainController">
+   <children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="Atividade 1">
+               <content>
+                  <VBox prefHeight="285.0" prefWidth="601.0">
+                     <children>
+                        <SplitPane dividerPositions="0.5068119891008175" orientation="VERTICAL" prefHeight="291.0" prefWidth="668.0" VBox.vgrow="ALWAYS">
+                           <items>
+                              <VBox prefHeight="213.0" prefWidth="666.0">
+                                 <children>
+                                    <HBox prefHeight="115.0" prefWidth="648.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <VBox prefHeight="46.0" prefWidth="164.0">
+                                             <children>
+                                                <Label text="Algoritmo">
+                                                   <VBox.margin>
+                                                      <Insets bottom="4.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbAlgoritmoCriptografar" prefHeight="24.0" prefWidth="217.0" />
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                          <VBox prefHeight="73.0" prefWidth="474.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label text="Texto">
+                                                   <VBox.margin>
+                                                      <Insets bottom="4.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <TextArea fx:id="inputTextoCriptografar" prefHeight="132.0" prefWidth="474.0" wrapText="true" VBox.vgrow="ALWAYS" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <VBox prefHeight="44.0" prefWidth="277.0">
+                                       <children>
+                                          <Label text="Chave de criptografia">
+                                             <VBox.margin>
+                                                <Insets bottom="4.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="inputChaveCriptografar" prefHeight="24.0" prefWidth="259.0" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="49.0" prefWidth="666.0">
+                                 <children>
+                                    <FlowPane hgap="10.0" prefHeight="9.0" prefWidth="580.0" vgap="10.0">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <Button fx:id="btnCriptografar" mnemonicParsing="false" onAction="#criptografar" prefHeight="30.0" prefWidth="200.0" styleClass="accent" text="Criptografar" />
+                                          <Button fx:id="btnDescriptografar" mnemonicParsing="false" onAction="#descriptografar" prefHeight="30.0" prefWidth="200.0" styleClass="danger" text="Descriptografar" />
+                                       </children>
+                                    </FlowPane>
+                                    <VBox prefHeight="132.0" prefWidth="581.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <TextArea fx:id="outputCriptografia" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Saída" wrapText="true" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </VBox>
+               </content>
+          </Tab>
+          <Tab text="Atividade 2">
+               <content>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Gerar Hash">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+                                       <items>
+                                          <VBox prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                   <children>
+                                                      <VBox prefHeight="97.0" prefWidth="169.0">
+                                                         <children>
+                                                            <Label text="Algoritmo">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" />
+                                                               </VBox.margin>
+                                                            </Label>
+                                                            <ComboBox fx:id="cbAlgoritmoGerarHash" prefHeight="24.0" prefWidth="326.0" />
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets right="10.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                      <VBox prefHeight="59.0" prefWidth="467.0" HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Texto">
+                                                               <VBox.margin>
+                                                                  <Insets bottom="4.0" />
+                                                               </VBox.margin>
+                                                            </Label>
+                                                            <TextArea fx:id="inputGerarHash" prefHeight="224.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                                   <children>
+                                                      <Button fx:id="btnGerarHash" mnemonicParsing="false" onAction="#gerarHash" prefHeight="30.0" prefWidth="140.0" styleClass="accent" text="Gerar">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                         </VBox.margin>
+                                                      </Button>
+                                                      <TextArea fx:id="outputGerarHash" editable="false" prefHeight="120.0" prefWidth="581.0" promptText="Saída" wrapText="true" VBox.vgrow="ALWAYS">
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </TextArea>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </VBox>
+                                             </children>
+                                          </VBox>
+                                       </items>
+                                    </SplitPane>
+                                 </children>
+                              </VBox>
+                           </content>
+                      </Tab>
+                      <Tab text="Comparar Hash">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <VBox prefHeight="123.0" prefWidth="668.0">
+                                       <children>
+                                          <Label text="Hash 1">
+                                             <VBox.margin>
+                                                <Insets bottom="4.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextArea fx:id="inputCompararHash1" prefHeight="200.0" prefWidth="200.0" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                    <VBox prefHeight="123.0" prefWidth="668.0">
+                                       <children>
+                                          <Label text="Hash 2">
+                                             <VBox.margin>
+                                                <Insets bottom="4.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextArea fx:id="inputCompararHash2" prefHeight="200.0" prefWidth="200.0" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                    <Button fx:id="btnCompararHash" mnemonicParsing="false" onAction="#compararHash" prefHeight="30.0" prefWidth="200.0" styleClass="accent" text="Comparar">
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>
