@@ -204,12 +204,8 @@ public class MainController {
 
         CryptographyAlgorithm algorithm = cbAlgoritmoCriptografar.getValue();
 
-        String plaintext = cryptographyService.decrypt(ciphertext, algorithm, secretKey);
-
         getDescriptografarThread(ciphertext, algorithm, secretKey)
                 .start();
-
-        this.outputCriptografia.setText(plaintext);
     }
 
     private Thread getDescriptografarThread(String ciphertext, CryptographyAlgorithm algorithm, SecretKey secretKey) {
