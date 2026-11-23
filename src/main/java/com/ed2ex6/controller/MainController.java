@@ -1,19 +1,34 @@
 package com.ed2ex6.controller;
 
+import com.ed2ex6.model.CryptographyAlgorithm;
+import com.ed2ex6.model.HashAlgorithm;
 import com.ed2ex6.service.CryptographyService;
+import com.ed2ex6.service.HashService;
+import com.ed2ex6.service.KeyUtils;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 
-import java.util.List;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 
 public class MainController {
+    private HashService hashService = new HashService();
     private CryptographyService cryptographyService = new CryptographyService();
 
     @FXML
     private Button btnCompararHash;
+
+    @FXML
+    private Button btnGerarChaveAleatoria;
 
     @FXML
     private Button btnCriptografar;
@@ -25,10 +40,10 @@ public class MainController {
     private Button btnGerarHash;
 
     @FXML
-    private ComboBox<String> cbAlgoritmoCriptografar;
+    private ComboBox<CryptographyAlgorithm> cbAlgoritmoCriptografar;
 
     @FXML
-    private ComboBox<String> cbAlgoritmoGerarHash;
+    private ComboBox<HashAlgorithm> cbAlgoritmoGerarHash;
 
     @FXML
     private TextField inputChaveCriptografar;
@@ -58,13 +73,44 @@ public class MainController {
     }
 
     private void setupComboBoxes() {
-        this.cbAlgoritmoGerarHash.setItems(FXCollections.observableArrayList(
-                "MD5", "SHA-256", "SHA-512", "SHA3-256", "SHA3-512"
+        setupAlgoritmoGerarHash();
+        setupALgoritmoCriptografar();
+    }
+
+    private void setupALgoritmoCriptografar() {
+        this.cbAlgoritmoCriptografar.setItems(FXCollections.observableArrayList(
+                CryptographyAlgorithm.values()
         ));
 
-        this.cbAlgoritmoCriptografar.setItems(FXCollections.observableArrayList(
-                "MD5", "SHA-256", "SHA-512", "SHA3-256", "SHA3-512"
+        this.cbAlgoritmoCriptografar.setConverter(new StringConverter<CryptographyAlgorithm>() {
+            @Override
+            public String toString(CryptographyAlgorithm object) {
+                return object != null ? object.name() : "";
+            }
+
+            @Override
+            public CryptographyAlgorithm fromString(String string) {
+                return null;
+            }
+        });
+    }
+
+    private void setupAlgoritmoGerarHash() {
+        this.cbAlgoritmoGerarHash.setItems(FXCollections.observableArrayList(
+                HashAlgorithm.values()
         ));
+
+        this.cbAlgoritmoGerarHash.setConverter(new StringConverter<HashAlgorithm>() {
+            @Override
+            public String toString(HashAlgorithm object) {
+                return object != null ? object.name() : "";
+            }
+
+            @Override
+            public HashAlgorithm fromString(String string) {
+                return null;
+            }
+        });
     }
 
     @FXML
@@ -77,13 +123,112 @@ public class MainController {
     }
 
     @FXML
-    void criptografar(ActionEvent event) {
+    void gerarChaveCriptografiaAleatoria(ActionEvent event){
+        if (cbAlgoritmoCriptografar.getValue() == null){
+            showAlertError("Algoritmo necessário", "Selecione um algoritmo de criptografia");
+            return;
+        }
 
+        SecretKey secretKey = KeyUtils.random(cbAlgoritmoCriptografar.getValue());
+
+        this.inputChaveCriptografar.setText(KeyUtils.toHex(secretKey));
+    }
+
+    @FXML
+    void criptografar(ActionEvent event) {
+        if (cbAlgoritmoCriptografar.getValue() == null){
+            showAlertError("Algoritmo necessário", "Selecione um algoritmo de criptografia");
+            return;
+        }
+
+        if (inputTextoCriptografar.getText() == null || inputTextoCriptografar.getText().isBlank()){
+            showAlertError("Plaintext necessário", "Insira um plaintext para criptografar");
+            return;
+        }
+
+        if (inputChaveCriptografar.getText() == null || inputChaveCriptografar.getText().isBlank()){
+            showAlertError("Chave necessária", "Insira uma chave de criptografia");
+            return;
+        }
+
+        SecretKey secretKey = KeyUtils.fromHex(inputChaveCriptografar.getText(), cbAlgoritmoCriptografar.getValue());
+
+        String plaintext = inputTextoCriptografar.getText();
+
+        CryptographyAlgorithm algorithm = cbAlgoritmoCriptografar.getValue();
+
+
+        getCriptografarThread(plaintext, algorithm, secretKey)
+                .start();
+    }
+
+    private Thread getCriptografarThread(String plaintext, CryptographyAlgorithm algorithm, SecretKey secretKey) {
+        Task<String> task = new Task<String>() {
+            @Override
+            protected String call() throws Exception {
+                return cryptographyService.encrypt(plaintext, algorithm, secretKey);
+            }
+        };
+
+        task.setOnFailed(e -> {
+            showAlertError("Erro na criptografia", "Impossível criptografar o texto");
+        });
+
+        task.setOnSucceeded(e -> {
+            this.outputCriptografia.setText(task.getValue());
+        });
+
+        return new Thread(task);
     }
 
     @FXML
     void descriptografar(ActionEvent event) {
+        if (cbAlgoritmoCriptografar.getValue() == null){
+            showAlertError("Algoritmo necessário", "Selecione um algoritmo de criptografia");
+            return;
+        }
 
+        if (inputTextoCriptografar.getText() == null || inputTextoCriptografar.getText().isBlank()){
+            showAlertError("Ciphertext necessário", "Insira um ciphertext para descriptografar");
+            return;
+        }
+
+        if (inputChaveCriptografar.getText() == null || inputChaveCriptografar.getText().isBlank()){
+            showAlertError("Chave necessária", "Insira uma chave de criptografia");
+            return;
+        }
+
+        SecretKey secretKey = KeyUtils.fromHex(inputChaveCriptografar.getText(), cbAlgoritmoCriptografar.getValue());
+
+        String ciphertext = inputTextoCriptografar.getText();
+
+        CryptographyAlgorithm algorithm = cbAlgoritmoCriptografar.getValue();
+
+        String plaintext = cryptographyService.decrypt(ciphertext, algorithm, secretKey);
+
+        getDescriptografarThread(ciphertext, algorithm, secretKey)
+                .start();
+
+        this.outputCriptografia.setText(plaintext);
+    }
+
+    private Thread getDescriptografarThread(String ciphertext, CryptographyAlgorithm algorithm, SecretKey secretKey) {
+        Task<String> task = new Task<String>() {
+            @Override
+            protected String call() throws Exception {
+                return cryptographyService.decrypt(ciphertext, algorithm, secretKey);
+            }
+        };
+
+        task.setOnFailed(e -> {
+            showAlertError("Erro na criptografia", "Impossível descriptografar o texto");
+        });
+
+        task.setOnSucceeded(e -> {
+            this.outputCriptografia.setText(task.getValue());
+        });
+
+        return new Thread(task);
     }
 
     @FXML
@@ -93,16 +238,16 @@ public class MainController {
             return;
         }
 
-        if (this.cbAlgoritmoGerarHash.getValue() == null || this.cbAlgoritmoGerarHash.getValue().isBlank()){
+        if (this.cbAlgoritmoGerarHash.getValue() == null){
             showAlertError("Entrada inválida", "Selecione o algoritmo para gerar o hash.");
             return;
         }
 
 
         String text = this.inputGerarHash.getText();
-        String algorithm = this.cbAlgoritmoGerarHash.getValue();
+        String algorithm = this.cbAlgoritmoGerarHash.getValue().label;
 
-        String hash = this.cryptographyService.toHash(text, algorithm);
+        String hash = this.hashService.toHash(text, algorithm);
         this.outputGerarHash.setText(hash);
     }
 
